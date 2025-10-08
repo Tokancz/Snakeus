@@ -9,22 +9,48 @@
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-    <h1>The Snake</h1>
-    <div class="score">
-        <p id="score">Score: 0</p>
-        <p id="best-score">Best: 0</p>
-    </div>
-    
-    <div id="game-container">
-        <canvas id="game"></canvas>
-        <div id="death-screen" class="hidden">
-        <section id="death-screen-info">
-            <h2>You Died!</h2>
-            <p id="final-score"></p>
-            <button id="restart-btn" class="button">Restart</button>
-        </section>
+    <aside class="settings">
+        <h3>Settings</h3>
+
+        <label for="checkbox" class="set-button">Setting
+            <input type="checkbox" name="checkbox" id="checkbox">
+        </label>
+        <label for="checkbox2" class="set-button">Setting
+            <input type="checkbox" name="checkbox" id="checkbox2">
+        </label>
+        <label for="checkbox3" class="set-button">Setting
+            <input type="checkbox" name="checkbox" id="checkbox3">
+        </label>
+    </aside>
+    <main>
+        <h1>The Snake</h1>
+        <div class="score">
+            <p id="score">Score: 0</p>
+            <p id="best-score">Best: 0</p>
         </div>
-    </div>
+        
+        <div id="game-container">
+            <canvas id="game"></canvas>
+            <div id="death-screen" class="hidden">
+            <section id="death-screen-info">
+                <h2>You Died!</h2>
+                <p id="final-score"></p>
+                <button id="restart-btn" class="button">Restart</button>
+            </section>
+            </div>
+        </div>
+    </main>
+    <aside>
+        <div id="snake">
+            <div class="snake-part"></div>
+            <div class="snake-part"></div>
+            <div class="snake-part"></div>
+            <div class="snake-part"></div>
+            <div class="snake-part"></div>
+            <div class="snake-part"></div>
+            <div class="snake-part"></div>
+        </div>
+    </aside>
 
     <script src="script/script.js"></script>
 </body>

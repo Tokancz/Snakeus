@@ -12,14 +12,80 @@
 body {
   height: 100dvh;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+  background: var(--primary);
+  color: var(--light);
+  font-family: 'Courier New', monospace;
+}
+main {
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 20px;
-  background: var(--primary);
-  background: linear-gradient(180deg, var(--primary) 0%, rgba(15, 15, 15, 1) 100%);
-  color: var(--light);
-  font-family: 'Courier New', monospace;
+}
+aside {
+  width: 250px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.settings {
+  gap: 10px;
+  justify-content: start;
+  background-color: var(--secondary-dark);
+  border: 2px solid var(--secondary);
+  border-radius: 6px;
+}
+.settings h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 30px 0;
+}
+.set-button {
+  width: 200px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 1.2rem;
+  color: var(--accent);
+  font-weight: 600;
+  background-color: var(--secondary-dark);
+  border: 2px solid var(--accent);
+  border-radius: 2px;
+}
+.set-button input[type=checkbox] {/*Checkbox*/
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  background: var(--secondary-dark);
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  transition: 0.3s ease-out;
+}
+.set-button input[type=checkbox]:checked {
+  background: var(--accent);
+}
+.set-button:hover input[type=checkbox] {
+  border-color: var(--purple);
+}
+.set-button:hover input[type=checkbox]:checked {
+  background-color: var(--purple);
+}
+.set-button:hover {
+  border-color: var(--purple);
+  color: var(--purple);
 }
 h1 {
   margin-top: 0;
@@ -101,4 +167,17 @@ canvas {
 }
 #restart-btn {
   margin-top: 20px;
+}
+div#snake {
+  width: 64px;
+  height: calc(64px * 7);
+  display: flex;
+  flex-direction: column;
+  background: var(--accent);
+  background: linear-gradient(180deg, var(--accent) 0%, #3fff3f00 100%);
+}
+.snake-part {
+  height: 64px;
+  width: 64px;
+  border: 1px solid var(--primary);
 }
