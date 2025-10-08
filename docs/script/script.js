@@ -4,12 +4,14 @@ const scoreText = document.getElementById("score");
 const deathScreen = document.getElementById("death-screen");
 const restartBtn = document.getElementById("restart-btn");
 const finalScore = document.getElementById("final-score");
+const bestScoreText = document.getElementById("best-score");
 
 let gridSize = 20;
 let tileSize;
 let snake, apples, dir, score, runSpeed;
 let lastDir = null;
 let loop;
+let bestScore = 0;
 
 // --- Direction enum ---
 const direction = {
@@ -28,6 +30,14 @@ class Coordinate {
   equals(other) {
     return this.x === other.x && this.y === other.y;
   }
+}
+
+// Load best score from localStorage
+if (localStorage.getItem("bestScore")) {
+  bestScore = parseInt(localStorage.getItem("bestScore"));
+  bestScoreText.textContent = "Best: " + bestScore;
+} else {
+  bestScoreText.textContent = "Best: 0";
 }
 
 // --- Resize and initialize ---
@@ -70,6 +80,38 @@ function getRandomApple() {
     );
   } while (snake.some(segment => segment.equals(newApple)));
   return newApple;
+}
+
+function blendColors(c1, c2, t) {
+  const parseHex = c => {
+    const hex = c.replace("#", "");
+    if (hex.length === 8) { // RGBA
+      return [
+        parseInt(hex.substring(0, 2), 16),
+        parseInt(hex.substring(2, 4), 16),
+        parseInt(hex.substring(4, 6), 16),
+        parseInt(hex.substring(6, 8), 16) / 255
+      ];
+    } else if (hex.length === 6) { // RGB
+      return [
+        parseInt(hex.substring(0, 2), 16),
+        parseInt(hex.substring(2, 4), 16),
+        parseInt(hex.substring(4, 6), 16),
+        1
+      ];
+    }
+    return [0, 255, 0, 1];
+  };
+
+  const [r1, g1, b1, a1] = parseHex(c1);
+  const [r2, g2, b2, a2] = parseHex(c2);
+
+  const r = Math.round(r1 + (r2 - r1) * t);
+  const g = Math.round(g1 + (g2 - g1) * t);
+  const b = Math.round(b1 + (b2 - b1) * t);
+  const a = a1 + (a2 - a1) * t;
+
+  return `rgba(${r},${g},${b},${a})`;
 }
 
 // --- Movement ---
@@ -116,17 +158,32 @@ function checkCollisions() {
 // --- Draw everything ---
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // apples
+
+  // --- Draw apples ---
   ctx.fillStyle = "red";
   for (const a of apples) {
     ctx.fillRect(a.x * tileSize, a.y * tileSize, tileSize, tileSize);
   }
-  // snake
-  ctx.fillStyle = "lime";
-  for (const s of snake) {
+
+  // --- Draw snake with gradient ---
+  for (let i = 0; i < snake.length; i++) {
+    // Ratio of how far along the snake this segment is (0 = tail, 1 = head)
+    const t = i / (snake.length - 1);
+
+    // Interpolate the color between head and tail
+    // Head color = --accent, tail = transparent green (#3fff3f00)
+    const headColor = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#00ff00";
+    const tailColor = "#3fff3f00";
+
+    // Blend the two colors (linear interpolation)
+    const blended = blendColors(tailColor, headColor, t);
+
+    ctx.fillStyle = blended;
+    const s = snake[i];
     ctx.fillRect(s.x * tileSize, s.y * tileSize, tileSize, tileSize);
   }
 }
+
 
 // --- Game loop ---
 function gameLoop() {
@@ -135,7 +192,15 @@ function gameLoop() {
   const collision = checkCollisions();
   if (collision === "death") {
     clearInterval(loop);
+
+    // Update best score if needed
+    if (score > bestScore) {
+      bestScore = score;
+      localStorage.setItem("bestScore", bestScore);
+    }
+
     finalScore.textContent = "Final Score: " + score;
+    bestScoreText.textContent = "Best: " + bestScore;
     deathScreen.classList.remove("hidden");
     return;
   } else if (collision === "apple") {

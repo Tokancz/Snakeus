@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Insane Snake</title>
+    <title>The Snake</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="https://api.ssps.cajthaml.eu/file/64d9f18f79dad891e8a07c73">
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <h1>The Snake</h1>
-    <p id="score">Score: 0</p>
-
+    <div class="score">
+        <p id="score">Score: 0</p>
+        <p id="best-score">Best: 0</p>
+    </div>
+    
     <div id="game-container">
         <canvas id="game"></canvas>
         <div id="death-screen" class="hidden">
-        <h2>You Died!</h2>
-        <p id="final-score"></p>
-        <button id="restart-btn">Restart</button>
+        <section id="death-screen-info">
+            <h2>You Died!</h2>
+            <p id="final-score"></p>
+            <button id="restart-btn" class="button">Restart</button>
+        </section>
         </div>
     </div>
 
