@@ -11,16 +11,25 @@
 <body>
     <aside class="settings">
         <h3>Settings</h3>
+        <div class="slider-container">
+            <p id="speed-value">Speed: 150 ms</p>
+            <input type="range" id="speed-range" min="50" max="500" value="150" step="50">
+        </div>
+        <div class="slider-container">
+            <p id="apple-value">Apples: 5</p>
+            <input type="range" id="apple-range" min="1" max="15" value="5" step="1">
+        </div>
+        <div class="slider-container">
+            <p id="grid-value">Grid Size: 20</p>
+            <input type="range" id="grid-range" min="1" max="15" value="20" step="1">
+        </div>
+        <label for="checkbox-gradient" class="set-button">Gradient Snake
+            <input type="checkbox" name="checkboxgradient" id="checkbox-gradient" checked>
+        </label>
+        <label for="checkbox-warp" class="set-button">Warp Walls
+            <input type="checkbox" name="checkboxwarp" id="checkbox-warp">
+        </label>
 
-        <label for="checkbox" class="set-button">Setting
-            <input type="checkbox" name="checkbox" id="checkbox">
-        </label>
-        <label for="checkbox2" class="set-button">Setting
-            <input type="checkbox" name="checkbox" id="checkbox2">
-        </label>
-        <label for="checkbox3" class="set-button">Setting
-            <input type="checkbox" name="checkbox" id="checkbox3">
-        </label>
     </aside>
     <main>
         <h1>The Snake</h1>

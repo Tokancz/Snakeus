@@ -35,7 +35,7 @@ aside {
   justify-content: center;
 }
 .settings {
-  gap: 10px;
+  gap: 20px;
   justify-content: start;
   background-color: var(--secondary-dark);
   border: 2px solid var(--secondary);
@@ -44,7 +44,7 @@ aside {
 .settings h3 {
   font-size: 2rem;
   font-weight: 600;
-  margin: 30px 0;
+  margin: 20px 0;
 }
 .set-button {
   width: 200px;
@@ -69,6 +69,7 @@ aside {
   border: 2px solid var(--accent);
   border-radius: 4px;
   background: var(--secondary-dark);
+  outline: none;
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
@@ -86,6 +87,29 @@ aside {
 .set-button:hover {
   border-color: var(--purple);
   color: var(--purple);
+}
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.slider-container p {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.slider-container:hover p, .slider-container:hover input[type="range"] {
+  color: var(--purple);
+  accent-color: var(--purple);
+}
+.slider-container input[type="range"] {
+  width: 180px;
+  height: 5px;
+  border-radius: 5px;
+  background: var(--secondary);
+  accent-color: var(--accent);
+  outline: none;
+  cursor: pointer;
 }
 h1 {
   margin-top: 0;

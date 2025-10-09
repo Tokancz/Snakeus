@@ -5,10 +5,17 @@ const deathScreen = document.getElementById("death-screen");
 const restartBtn = document.getElementById("restart-btn");
 const finalScore = document.getElementById("final-score");
 const bestScoreText = document.getElementById("best-score");
+const speedRange = document.getElementById("speed-range");
+const speedValue = document.getElementById("speed-value");
+const appleRange = document.getElementById("apple-range");
+const appleValue = document.getElementById("apple-value");
+const warpCheckbox = document.getElementById("checkbox-warp");
+const gradientCheckbox = document.getElementById("checkbox-gradient");
 
 let gridSize = 20;
 let tileSize;
-let snake, apples, dir, score, runSpeed;
+let snake, apples, dir, score;
+let runSpeed = parseInt(speedRange.value);
 let lastDir = null;
 let loop;
 let bestScore = 0;
@@ -54,7 +61,6 @@ function resetGame() {
   score = 0;
   dir = direction.Right;
   lastDir = dir;
-  runSpeed = 150;
 
   snake = [
     new Coordinate(1, 1),
@@ -62,7 +68,7 @@ function resetGame() {
     new Coordinate(3, 1)
   ];
 
-  apples = Array.from({ length: 3 }, getRandomApple);
+  apples = Array.from({ length: parseInt(appleRange.value) }, getRandomApple);
 
   deathScreen.classList.add("hidden");
   scoreText.textContent = "Score: 0";
@@ -118,12 +124,22 @@ function blendColors(c1, c2, t) {
 function moveSnake() {
   const head = snake[snake.length - 1];
   let newHead;
+
   switch (dir) {
     case direction.Up: newHead = new Coordinate(head.x, head.y - 1); break;
     case direction.Down: newHead = new Coordinate(head.x, head.y + 1); break;
     case direction.Left: newHead = new Coordinate(head.x - 1, head.y); break;
     case direction.Right: newHead = new Coordinate(head.x + 1, head.y); break;
   }
+
+  // --- Warp Walls behavior ---
+  if (warpCheckbox.checked) {
+    if (newHead.x < 0) newHead.x = gridSize - 1;
+    else if (newHead.x >= gridSize) newHead.x = 0;
+    if (newHead.y < 0) newHead.y = gridSize - 1;
+    else if (newHead.y >= gridSize) newHead.y = 0;
+  }
+
   snake.push(newHead);
   lastDir = dir;
 }
@@ -131,9 +147,9 @@ function moveSnake() {
 // --- Collision check ---
 function checkCollisions() {
   const head = snake[snake.length - 1];
-
+  
   // wall
-  if (head.x < 0 || head.y < 0 || head.x >= gridSize || head.y >= gridSize)
+  if (!warpCheckbox.checked && (head.x < 0 || head.y < 0 || head.x >= gridSize || head.y >= gridSize))
     return "death";
 
   // self collision
@@ -167,19 +183,19 @@ function draw() {
 
   // --- Draw snake with gradient ---
   for (let i = 0; i < snake.length; i++) {
-    // Ratio of how far along the snake this segment is (0 = tail, 1 = head)
-    const t = i / (snake.length - 1);
-
-    // Interpolate the color between head and tail
-    // Head color = --accent, tail = transparent green (#3fff3f00)
-    const headColor = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#00ff00";
-    const tailColor = "#3fff3f00";
-
-    // Blend the two colors (linear interpolation)
-    const blended = blendColors(tailColor, headColor, t);
-
-    ctx.fillStyle = blended;
     const s = snake[i];
+    
+    if (gradientCheckbox.checked) {
+      // --- Gradient enabled ---
+      const t = i / (snake.length - 1);
+      const headColor = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#00ff00";
+      const tailColor = "#3fff3f00";
+      ctx.fillStyle = blendColors(tailColor, headColor, t);
+    } else {
+      // --- Gradient disabled: solid color ---
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#00ff00";
+    }
+
     ctx.fillRect(s.x * tileSize, s.y * tileSize, tileSize, tileSize);
   }
 }
@@ -188,6 +204,7 @@ function draw() {
 // --- Game loop ---
 function gameLoop() {
   moveSnake();
+  console.log("Speed:", runSpeed);
 
   const collision = checkCollisions();
   if (collision === "death") {
@@ -221,8 +238,19 @@ document.addEventListener("keydown", e => {
     if (lastDir !== direction.Right) dir = direction.Left;
   } else if (e.key === "d" || e.key === "ArrowRight") {
     if (lastDir !== direction.Left) dir = direction.Right;
+  } else if (e.key === " " || e.key === "Enter") {
+    resetGame();
   }
 });
+
+speedRange.addEventListener("input", () => {
+  runSpeed = parseInt(speedRange.value);
+  speedValue.textContent = "Speed: " + runSpeed + " ms";
+});
+appleRange.addEventListener("input", () => {
+  appleValue.textContent = "Apples: " + appleRange.value;
+});
+
 
 restartBtn.addEventListener("click", resetGame);
 window.addEventListener("resize", setupCanvas);
