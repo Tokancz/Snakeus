@@ -21,7 +21,7 @@
         </div>
         <div class="slider-container">
             <p id="grid-value">Grid Size: 20</p>
-            <input type="range" id="grid-range" min="1" max="15" value="20" step="1">
+            <input type="range" id="grid-range" min="6" max="40" value="20" step="2">
         </div>
         <label for="checkbox-gradient" class="set-button">Gradient Snake
             <input type="checkbox" name="checkboxgradient" id="checkbox-gradient" checked>
@@ -42,7 +42,7 @@
             <canvas id="game"></canvas>
             <div id="death-screen" class="hidden">
             <section id="death-screen-info">
-                <h2>You Died!</h2>
+                <h2 id="death-text">You Died!</h2>
                 <p id="final-score"></p>
                 <button id="restart-btn" class="button">Restart</button>
             </section>

@@ -182,9 +182,13 @@ canvas {
 }
 #death-screen h2 {
   color: var(--danger);
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 800;
   text-shadow: 0 0 10px var(--danger);
+}
+#death-screen h2.win {
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent);
 }
 #death-screen.hidden {
   display: none;

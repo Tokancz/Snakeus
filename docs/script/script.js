@@ -3,14 +3,19 @@ const ctx = canvas.getContext("2d");
 const scoreText = document.getElementById("score");
 const deathScreen = document.getElementById("death-screen");
 const restartBtn = document.getElementById("restart-btn");
+const deathText = document.getElementById("death-text");
 const finalScore = document.getElementById("final-score");
 const bestScoreText = document.getElementById("best-score");
 const speedRange = document.getElementById("speed-range");
 const speedValue = document.getElementById("speed-value");
 const appleRange = document.getElementById("apple-range");
 const appleValue = document.getElementById("apple-value");
+const gridRange = document.getElementById("grid-range");
+const gridValue = document.getElementById("grid-value");
 const warpCheckbox = document.getElementById("checkbox-warp");
 const gradientCheckbox = document.getElementById("checkbox-gradient");
+
+const eatSound = new Audio("sounds/snakeEats.wav");
 
 let gridSize = 20;
 let tileSize;
@@ -59,6 +64,7 @@ function setupCanvas() {
 function resetGame() {
   setupCanvas();
   score = 0;
+  eatSound.volume = 1;
   dir = direction.Right;
   lastDir = dir;
 
@@ -164,6 +170,8 @@ function checkCollisions() {
       apples.push(getRandomApple());
       score++;
       scoreText.textContent = "Score: " + score;
+      eatSound.currentTime = 0;
+      eatSound.play();
       return "apple";
     }
   }
@@ -204,7 +212,6 @@ function draw() {
 // --- Game loop ---
 function gameLoop() {
   moveSnake();
-  console.log("Speed:", runSpeed);
 
   const collision = checkCollisions();
   if (collision === "death") {
@@ -214,6 +221,15 @@ function gameLoop() {
     if (score > bestScore) {
       bestScore = score;
       localStorage.setItem("bestScore", bestScore);
+    }
+    
+    if (score + 2 === Math.pow(gridSize, 2)) {
+      deathText.textContent = "You Win";
+      deathText.classList.add("win");
+    }
+    if (score + 2 === 8 || score + 2 === 9) {
+      deathText.textContent = "⁶🤷⁷";
+      deathText.classList.add("win");
     }
 
     finalScore.textContent = "Final Score: " + score;
@@ -230,13 +246,13 @@ function gameLoop() {
 
 // --- Controls ---
 document.addEventListener("keydown", e => {
-  if (e.key === "w" || e.key === "ArrowUp") {
+  if (e.key === "w" || e.key === "W" || e.key === "ArrowUp") {
     if (lastDir !== direction.Down) dir = direction.Up;
-  } else if (e.key === "s" || e.key === "ArrowDown") {
+  } else if (e.key === "s" || e.key === "S" || e.key === "ArrowDown") {
     if (lastDir !== direction.Up) dir = direction.Down;
-  } else if (e.key === "a" || e.key === "ArrowLeft") {
+  } else if (e.key === "a" || e.key === "A" || e.key === "ArrowLeft") {
     if (lastDir !== direction.Right) dir = direction.Left;
-  } else if (e.key === "d" || e.key === "ArrowRight") {
+  } else if (e.key === "d" || e.key === "D" || e.key === "ArrowRight") {
     if (lastDir !== direction.Left) dir = direction.Right;
   } else if (e.key === " " || e.key === "Enter") {
     resetGame();
@@ -249,6 +265,11 @@ speedRange.addEventListener("input", () => {
 });
 appleRange.addEventListener("input", () => {
   appleValue.textContent = "Apples: " + appleRange.value;
+});
+gridRange.addEventListener("input", () => {
+  gridSize = parseInt(gridRange.value);
+  gridValue.textContent = "Grid Size: " + gridSize;
+  resetGame()
 });
 
 
