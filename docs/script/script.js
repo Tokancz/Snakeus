@@ -14,8 +14,11 @@ const gridRange = document.getElementById("grid-range");
 const gridValue = document.getElementById("grid-value");
 const warpCheckbox = document.getElementById("checkbox-warp");
 const gradientCheckbox = document.getElementById("checkbox-gradient");
+const volumeRange = document.getElementById("volume-range");
+const volumeValue = document.getElementById("volume-value");
 
 const eatSound = new Audio("sounds/snakeEats.wav");
+eatSound.volume = parseInt(volumeRange.value) / 100;
 
 let gridSize = 20;
 let tileSize;
@@ -64,7 +67,6 @@ function setupCanvas() {
 function resetGame() {
   setupCanvas();
   score = 0;
-  eatSound.volume = 1;
   dir = direction.Right;
   lastDir = dir;
 
@@ -271,7 +273,10 @@ gridRange.addEventListener("input", () => {
   gridValue.textContent = "Grid Size: " + gridSize;
   resetGame()
 });
-
+volumeRange.addEventListener("input", () => {
+  eatSound.volume = parseInt(volumeRange.value) / 100;
+  volumeValue.textContent = "Volume: " + volumeRange.value + "%";
+});
 
 restartBtn.addEventListener("click", resetGame);
 window.addEventListener("resize", setupCanvas);
