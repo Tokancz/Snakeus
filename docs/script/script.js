@@ -16,6 +16,7 @@ const warpCheckbox = document.getElementById("checkbox-warp");
 const gradientCheckbox = document.getElementById("checkbox-gradient");
 const volumeRange = document.getElementById("volume-range");
 const volumeValue = document.getElementById("volume-value");
+const themeColorPicker = document.getElementById("themecolor");
 
 const eatSound = new Audio("sounds/snakeEats.wav");
 eatSound.volume = parseInt(volumeRange.value) / 100;
@@ -53,6 +54,12 @@ if (localStorage.getItem("bestScore")) {
   bestScoreText.textContent = "Best: " + bestScore;
 } else {
   bestScoreText.textContent = "Best: 0";
+}
+
+if (localStorage.getItem("accentColor")) {
+  const savedColor = localStorage.getItem("accentColor");
+  document.documentElement.style.setProperty("--accent", savedColor);
+  themeColorPicker.value = savedColor;
 }
 
 // --- Resize and initialize ---
@@ -199,7 +206,7 @@ function draw() {
       // --- Gradient enabled ---
       const t = i / (snake.length - 1);
       const headColor = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#00ff00";
-      const tailColor = "#3fff3f00";
+      const tailColor = "#10101000";
       ctx.fillStyle = blendColors(tailColor, headColor, t);
     } else {
       // --- Gradient disabled: solid color ---
@@ -276,6 +283,11 @@ gridRange.addEventListener("input", () => {
 volumeRange.addEventListener("input", () => {
   eatSound.volume = parseInt(volumeRange.value) / 100;
   volumeValue.textContent = "Volume: " + volumeRange.value + "%";
+});
+themeColorPicker.addEventListener("input", e => {
+  const newColor = e.target.value;
+  document.documentElement.style.setProperty("--accent", newColor);
+  localStorage.setItem("accentColor", newColor);
 });
 
 restartBtn.addEventListener("click", resetGame);
