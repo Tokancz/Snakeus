@@ -236,7 +236,7 @@ function gameLoop() {
       deathText.textContent = "You Win";
       deathText.classList.add("win");
     }
-    if (score + 2 === 8 || score + 2 === 9) {
+    else if (score + 2 === 8 || score + 2 === 9) {
       deathText.textContent = "⁶🤷⁷";
       deathText.classList.add("win");
     }
